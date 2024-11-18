@@ -5,7 +5,12 @@ I used Rider IDE: https://www.jetbrains.com/rider/
 
 Service is built in .net so you'll need the latest .net 6 hosting bundle: [https://dotnet.microsoft.com/en-us/download/dotnet/6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 
+App settings are environment variables - you can set launchSettings.json for local: 
+![image](https://github.com/user-attachments/assets/b5e2deb2-50be-421d-9bbc-485a1e4ad75b)
+
 You can use the docker-compose.yml to containerize and deploy the background service locally:
+![image](https://github.com/user-attachments/assets/a4f8cfdf-0a1b-4d7a-8dd4-835d3df700d9)
+
  - Be sure to have Docker Desktop and Docker compose installed.
  - Navigate to the dir with docker-compose.yml and run `docker-compose up --build -d`
    
