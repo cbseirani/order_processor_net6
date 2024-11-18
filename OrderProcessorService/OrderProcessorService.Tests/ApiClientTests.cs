@@ -10,6 +10,7 @@ public class ApiClientTests
 {
     private readonly Mock<IConfiguration> _config = new();
     private readonly Mock<ILogger<ApiClient>> _logger = new();
+    
     public ApiClientTests() 
     { 
         // Set up mock configuration values
