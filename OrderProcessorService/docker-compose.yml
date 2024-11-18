@@ -1,6 +1,4 @@
-﻿version: '3.4'
-
-services:
+﻿services:
   order-processing-worker:
     image: orderprocessorservice:latest
     build:
