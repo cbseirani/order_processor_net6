@@ -1,4 +1,4 @@
-# Backgorund Order Processor
+# Background Order Processor
 Demonstration of a background service processing when orders have a 'delivered' status.
 
 I used Rider IDE: https://www.jetbrains.com/rider/
