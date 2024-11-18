@@ -14,7 +14,7 @@ You can use the docker-compose.yml to containerize and deploy the background ser
 ![image](https://github.com/user-attachments/assets/1f8f2537-65ef-4fd8-9608-7466d99d664e)
 
 
-There are basic happy path unit tests:
+There are basic happy path unit tests using xUnit and Moq:
 
 ![image](https://github.com/user-attachments/assets/1a4de62e-efc9-4ef8-ab7d-c0136c14ae8b)
 
