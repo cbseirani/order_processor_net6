@@ -1,0 +1,17 @@
+﻿version: '3.4'
+
+services:
+  order-processing-worker:
+    image: orderprocessorservice:latest
+    build:
+      context: .
+      dockerfile: OrderProcessorService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - LOG_LEVEL=Debug
+    networks:
+      - order-network
+
+networks:
+  order-network:
+    driver: bridge
