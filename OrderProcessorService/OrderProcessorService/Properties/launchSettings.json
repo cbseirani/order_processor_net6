@@ -4,7 +4,11 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "Production",
+        "LOG_LEVEL": "Debug",
+        "ORDERS_URL": "https://orders-api.com/orders",
+        "ALERTS_URL": "https://alert-api.com/alerts",
+        "UPDATES_URL": "https://update-api.com/update"
       }
     }
   }

@@ -13,16 +13,18 @@ public interface IApiClient
 public class ApiClient : IApiClient
 {
     private readonly ILogger<ApiClient> _logger;
+    private readonly IConfiguration _config;
     
-    public ApiClient(ILogger<ApiClient> logger)
+    public ApiClient(IConfiguration config, ILogger<ApiClient> logger)
     {
         _logger = logger;
+        _config = config;
     }
     
     public async Task<JObject[]> GetOrders()
     {
         _logger.LogInformation("Getting orders");
-        return await "https://orders-api.com/orders"
+        return await _config["ORDERS_URL"]
             .GetJsonAsync<JObject[]>();
     }
 
@@ -30,7 +32,7 @@ public class ApiClient : IApiClient
     {
         _logger.LogInformation("Sending delivery notification");
         var alertData = new { Message = $"Alert for delivered item: Order {orderId}" };
-        await "https://alert-api.com/alerts"
+        await _config["ALERTS_URL"]
             .PostJsonAsync(alertData)
             .ReceiveString();
     }
@@ -38,7 +40,7 @@ public class ApiClient : IApiClient
     public async Task UpdateOrderStatus(JObject order)
     {
         _logger.LogInformation("Sending delivery notification");
-        await "https://update-api.com/update"
+        await _config["UPDATES_URL"]
             .PostJsonAsync(order)
             .ReceiveString();
     }
