@@ -39,7 +39,7 @@ public class ApiClient : IApiClient
 
     public async Task UpdateOrderStatus(JObject order)
     {
-        _logger.LogInformation("Sending delivery notification");
+        _logger.LogInformation("Updating order status");
         await _config["UPDATES_URL"]
             .PostJsonAsync(order)
             .ReceiveString();

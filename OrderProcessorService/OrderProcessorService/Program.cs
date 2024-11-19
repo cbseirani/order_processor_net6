@@ -14,6 +14,7 @@ var logEventLevel = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), logLevel, t
 // create Serilog logger
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Is(logEventLevel)
+    .WriteTo.File("OrderProcessorLog")
     .WriteTo.Console()
     .CreateLogger();
 
