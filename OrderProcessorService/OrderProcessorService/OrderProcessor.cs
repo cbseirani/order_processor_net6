@@ -32,9 +32,11 @@ public class OrderProcessor : IOrderProcessor
                     if (!order.Status.Equals("Delivered", StringComparison.OrdinalIgnoreCase))
                         continue;
 
+                    if (order.NotificationCount > 0)
+                        continue;
+                    
                     await _apiClient.SendDeliveryNotification(order.OrderId);
                     order.NotificationCount += 1;
-
                     await _apiClient.UpdateOrderStatus(order);
                 }
                 catch (Exception e)
