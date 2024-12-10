@@ -14,9 +14,14 @@ public class ApiClientTests
     public ApiClientTests() 
     { 
         // Set up mock configuration values
-        _config.SetupGet(x => x["ORDERS_URL"]).Returns("https://orders-api.com/orders");
-        _config.SetupGet(x => x["ALERTS_URL"]).Returns("https://alert-api.com/alerts");
-        _config.SetupGet(x => x["UPDATES_URL"]).Returns("https://update-api.com/update"); 
+        _config.SetupGet(x => x["ORDERS_URL"])
+            .Returns("https://orders-api.com/orders");
+        
+        _config.SetupGet(x => x["ALERTS_URL"])
+            .Returns("https://alert-api.com/alerts");
+        
+        _config.SetupGet(x => x["UPDATES_URL"])
+            .Returns("https://update-api.com/update"); 
     }
     
     [Fact]
@@ -37,7 +42,11 @@ public class ApiClientTests
             .Times(1);
     }
     
-    private ApiClient CreateClient() => new (_config.Object, _logger.Object);
+    private ApiClient CreateClient() => new (
+        _config.Object["ORDERS_URL"], 
+        _config.Object["UPDATES_URL"], 
+        _config.Object["ALERTS_URL"], 
+        _logger.Object);
 }
 
 

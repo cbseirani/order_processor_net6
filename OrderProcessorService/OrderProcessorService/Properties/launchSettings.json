@@ -6,6 +6,7 @@
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Production",
         "LOG_LEVEL": "Debug",
+        "LOG_NAME": "OrderProcessorLog.log",
         "ORDERS_URL": "https://orders-api.com/orders",
         "ALERTS_URL": "https://alert-api.com/alerts",
         "UPDATES_URL": "https://update-api.com/update"

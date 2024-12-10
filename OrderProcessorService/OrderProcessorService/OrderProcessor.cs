@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace OrderProcessorService;
+﻿namespace OrderProcessorService;
 
 public interface IOrderProcessor
 {
@@ -21,26 +19,28 @@ public class OrderProcessor : IOrderProcessor
     public async Task ProcessOrders()
     {
         _logger.LogInformation("Processing orders...");
+        
+        // catch and contain any errors to ensure service doesn't crash
         try
         {
             var orders = await _apiClient.GetOrders();
             foreach (var order in orders)
             {
-                if (!order["Status"].ToString().Equals("Delivered", StringComparison.OrdinalIgnoreCase)) 
-                    continue;
-                
-                await _apiClient.SendDeliveryNotification(order["OrderId"].ToString());
-
-                // instantiate notification count if null
-                if (order["deliveryNotification"] is null 
-                    || order["deliveryNotification"].Type is JTokenType.Null)
+                // catch and contain any errors on each order to ensure each order can be processed
+                try
                 {
-                    order["deliveryNotification"] = 0;
-                }
+                    if (!order.Status.Equals("Delivered", StringComparison.OrdinalIgnoreCase))
+                        continue;
 
-                order["deliveryNotification"] = (int)order["deliveryNotification"] + 1;
-                
-                await _apiClient.UpdateOrderStatus(order);
+                    await _apiClient.SendDeliveryNotification(order.OrderId);
+                    order.NotificationCount += 1;
+
+                    await _apiClient.UpdateOrderStatus(order);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e,$"Error processing order {order.OrderId}");
+                }
             }
             
             _logger.LogInformation("Finished processing orders.");

@@ -1,47 +1,71 @@
 ﻿using Flurl.Http;
-using Newtonsoft.Json.Linq;
+using OrderProcessorService.Models;
 
 namespace OrderProcessorService;
 
 public interface IApiClient
 {
-    Task<JObject[]> GetOrders();
+    Task<IEnumerable<Order>> GetOrders();
     Task SendDeliveryNotification(string orderId);
-    Task UpdateOrderStatus(JObject order);
+    Task UpdateOrderStatus(Order order);
 }
 
 public class ApiClient : IApiClient
 {
     private readonly ILogger<ApiClient> _logger;
-    private readonly IConfiguration _config;
+    private readonly string _ordersUrl;
+    private readonly string _updatesUrl;
+    private readonly string _alertsUrl;
     
-    public ApiClient(IConfiguration config, ILogger<ApiClient> logger)
+    public ApiClient(string ordersUrl, string updatesUrl, string alertsUrl, ILogger<ApiClient> logger)
     {
         _logger = logger;
-        _config = config;
+        _ordersUrl = ordersUrl;
+        _updatesUrl = updatesUrl;
+        _alertsUrl = alertsUrl;
     }
     
-    public async Task<JObject[]> GetOrders()
+    public async Task<IEnumerable<Order>> GetOrders()
     {
-        _logger.LogInformation("Getting orders");
-        return await _config["ORDERS_URL"]
-            .GetJsonAsync<JObject[]>();
+        try
+        {
+            _logger.LogInformation("Getting orders");
+            return await _ordersUrl.GetJsonAsync<IEnumerable<Order>>();
+        }
+        catch(Exception e)
+        {
+            _logger.LogError(e, "Error fetching orders from API");
+            throw;
+        }
     }
 
     public async Task SendDeliveryNotification(string orderId)
     {
-        _logger.LogInformation("Sending delivery notification");
-        var alertData = new { Message = $"Alert for delivered item: Order {orderId}" };
-        await _config["ALERTS_URL"]
-            .PostJsonAsync(alertData)
-            .ReceiveString();
+        try
+        {
+            _logger.LogInformation("Sending delivery notification");
+            var alertData = new { Message = $"Alert for delivered item: Order {orderId}" };
+            await _alertsUrl.PostJsonAsync(alertData).ReceiveString();
+        }
+        catch(Exception e)
+        {
+            _logger.LogError(e, $"Error sending delivery notification for order {orderId} to alerts");
+            throw;
+        }
     }
 
-    public async Task UpdateOrderStatus(JObject order)
+    public async Task UpdateOrderStatus(Order order)
     {
-        _logger.LogInformation("Updating order status");
-        await _config["UPDATES_URL"]
-            .PostJsonAsync(order)
-            .ReceiveString();
+        try
+        {
+            _logger.LogInformation("Updating order status");
+            await _updatesUrl.PostJsonAsync(order).ReceiveString();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error sending order {order.OrderId} update to API");
+            throw;
+        }
+
     }
 }
