@@ -22,8 +22,6 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
-Log.Logger.Error("testing?!");
-
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
