@@ -16,8 +16,8 @@ public class OrderProcessorTests
         // Arrange
         _apiClient.Setup(x => x.GetOrders()).ReturnsAsync(new List<Order>
         {
-            new () { OrderId = "1", Status = "Delivered", NotificationCount = 0 },
-            new () { OrderId = "2", Status = "Pending", NotificationCount = 0 }
+            new () { OrderId = "1", Status = "Delivered" },
+            new () { OrderId = "2", Status = "Pending" }
         });
 
         // Act
