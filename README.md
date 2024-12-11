@@ -3,7 +3,7 @@ Demonstration of a background service processing when orders have a 'delivered' 
 
 I used Rider IDE: https://www.jetbrains.com/rider/
 
-Service is built in .net so you'll need the latest .net 6 hosting bundle: [https://dotnet.microsoft.com/en-us/download/dotnet/6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+Service is built in .NET 9 so you'll need the latest .NET 9 SDK + Hosting Bundle: https://dotnet.microsoft.com/en-us/download/dotnet/9.0
 
 App settings are environment variables - you can set launchSettings.json for local execution: 
 ![image](https://github.com/user-attachments/assets/b5e2deb2-50be-421d-9bbc-485a1e4ad75b)
