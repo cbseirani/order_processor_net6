@@ -1,29 +1,22 @@
-﻿namespace OrderProcessorService.Services;
+﻿using OrderProcessorService.Clients;
+
+namespace OrderProcessorService.Services;
 
 public interface IOrderService
 {
     Task ProcessOrders();
 }
 
-public class OrderService : IOrderService
+public class OrderService(IApiClient apiClient, ILogger<OrderService> logger) : IOrderService
 {
-    private readonly IApiClient _apiClient;
-    private readonly ILogger<OrderService> _logger;
-
-    public OrderService(IApiClient apiClient, ILogger<OrderService> logger)
-    {
-        _apiClient = apiClient;
-        _logger = logger;
-    }
-
     public async Task ProcessOrders()
     {
-        _logger.LogInformation("Processing orders...");
+        logger.LogInformation("Processing orders...");
 
         // catch and contain any errors to ensure service doesn't crash
         try
         {
-            var orders = await _apiClient.GetOrders();
+            var orders = await apiClient.GetOrders();
             foreach (var order in orders)
             {
                 // catch and contain any errors on each order to ensure each order can be processed
@@ -35,21 +28,21 @@ public class OrderService : IOrderService
                     if (order.NotificationSent)
                         continue;
 
-                    await _apiClient.SendDeliveryNotification(order.OrderId);
+                    await apiClient.SendDeliveryNotification(order.OrderId);
                     order.NotificationSent = true;
-                    await _apiClient.UpdateOrderStatus(order);
+                    await apiClient.UpdateOrderStatus(order);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Error processing order {order.OrderId}");
+                    logger.LogError(e, $"Error processing order {order.OrderId}");
                 }
             }
 
-            _logger.LogInformation("Finished processing orders.");
+            logger.LogInformation("Finished processing orders.");
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error processing orders.");
+            logger.LogError(e, "Error processing orders.");
         }
     }
 }

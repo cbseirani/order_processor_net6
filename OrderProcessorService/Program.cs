@@ -1,5 +1,6 @@
-using OrderProcessorService;
+using OrderProcessorService.Clients;
 using OrderProcessorService.Services;
+using OrderProcessorService.Workers;
 using Serilog;
 using Serilog.Events;
 
@@ -31,7 +32,7 @@ var host = Host.CreateDefaultBuilder(args)
             loggingBuilder.ClearProviders();
             loggingBuilder.AddSerilog(dispose: true);
         });
-        services.AddHostedService<Worker>();
+        services.AddHostedService<BackgroundWorker>();
         services.AddTransient<IOrderService, OrderService>();
         services.AddTransient<IApiClient, ApiClient>(provider => 
             new ApiClient(

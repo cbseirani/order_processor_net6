@@ -1,7 +1,7 @@
 ﻿using Flurl.Http;
 using OrderProcessorService.Models;
 
-namespace OrderProcessorService;
+namespace OrderProcessorService.Clients;
 
 public interface IApiClient
 {
@@ -10,31 +10,19 @@ public interface IApiClient
     Task UpdateOrderStatus(Order order);
 }
 
-public class ApiClient : IApiClient
+public class ApiClient(string ordersUrl, string updatesUrl, string alertsUrl, ILogger<ApiClient> logger)
+    : IApiClient
 {
-    private readonly ILogger<ApiClient> _logger;
-    private readonly string _ordersUrl;
-    private readonly string _updatesUrl;
-    private readonly string _alertsUrl;
-    
-    public ApiClient(string ordersUrl, string updatesUrl, string alertsUrl, ILogger<ApiClient> logger)
-    {
-        _logger = logger;
-        _ordersUrl = ordersUrl;
-        _updatesUrl = updatesUrl;
-        _alertsUrl = alertsUrl;
-    }
-    
     public async Task<IEnumerable<Order>> GetOrders()
     {
         try
         {
-            _logger.LogInformation("Getting orders");
-            return await _ordersUrl.GetJsonAsync<IEnumerable<Order>>();
+            logger.LogInformation("Getting orders");
+            return await ordersUrl.GetJsonAsync<IEnumerable<Order>>();
         }
         catch(Exception e)
         {
-            _logger.LogError(e, "Error fetching orders from API");
+            logger.LogError(e, "Error fetching orders from API");
             throw;
         }
     }
@@ -43,13 +31,13 @@ public class ApiClient : IApiClient
     {
         try
         {
-            _logger.LogInformation("Sending delivery notification");
+            logger.LogInformation("Sending delivery notification");
             var alertData = new { Message = $"Alert for delivered item: Order {orderId}" };
-            await _alertsUrl.PostJsonAsync(alertData).ReceiveString();
+            await alertsUrl.PostJsonAsync(alertData).ReceiveString();
         }
         catch(Exception e)
         {
-            _logger.LogError(e, $"Error sending delivery notification for order {orderId} to alerts");
+            logger.LogError(e, $"Error sending delivery notification for order {orderId} to alerts");
             throw;
         }
     }
@@ -58,12 +46,12 @@ public class ApiClient : IApiClient
     {
         try
         {
-            _logger.LogInformation("Updating order status");
-            await _updatesUrl.PostJsonAsync(order).ReceiveString();
+            logger.LogInformation("Updating order status");
+            await updatesUrl.PostJsonAsync(order).ReceiveString();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error sending order {order.OrderId} update to API");
+            logger.LogError(e, $"Error sending order {order.OrderId} update to API");
             throw;
         }
 

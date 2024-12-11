@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
+using OrderProcessorService.Clients;
 using Xunit;
 
 namespace OrderProcessorService.Tests;
