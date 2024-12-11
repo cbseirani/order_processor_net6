@@ -14,9 +14,10 @@ You can use the docker-compose.yml to containerize and deploy the background ser
  - Be sure to have Docker Desktop and Docker compose installed.
  - Navigate to the dir with docker-compose.yml and run `docker-compose up --build -d`
    
-![image](https://github.com/user-attachments/assets/22f3b0f9-cbdb-46e4-91f9-010e0bceb3ae)
+![image](https://github.com/user-attachments/assets/e2f40be6-f631-40c2-9db5-c7e65b4ba11f)
 
-![image](https://github.com/user-attachments/assets/1f8f2537-65ef-4fd8-9608-7466d99d664e)
+![image](https://github.com/user-attachments/assets/73be71b8-ac64-41fd-ba64-79c265fedd03)
+
 
 
 There are basic happy path unit tests using xUnit and Moq:
