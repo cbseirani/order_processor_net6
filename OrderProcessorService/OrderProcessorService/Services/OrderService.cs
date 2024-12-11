@@ -1,16 +1,16 @@
-﻿namespace OrderProcessorService;
+﻿namespace OrderProcessorService.Services;
 
-public interface IOrderProcessor
+public interface IOrderService
 {
     Task ProcessOrders();
 }
 
-public class OrderProcessor : IOrderProcessor
+public class OrderService : IOrderService
 {
     private readonly IApiClient _apiClient;
-    private readonly ILogger<OrderProcessor> _logger;
+    private readonly ILogger<OrderService> _logger;
 
-    public OrderProcessor(IApiClient apiClient, ILogger<OrderProcessor> logger)
+    public OrderService(IApiClient apiClient, ILogger<OrderService> logger)
     {
         _apiClient = apiClient;
         _logger = logger;
@@ -19,7 +19,7 @@ public class OrderProcessor : IOrderProcessor
     public async Task ProcessOrders()
     {
         _logger.LogInformation("Processing orders...");
-        
+
         // catch and contain any errors to ensure service doesn't crash
         try
         {
@@ -34,17 +34,17 @@ public class OrderProcessor : IOrderProcessor
 
                     if (order.NotificationSent)
                         continue;
-                    
+
                     await _apiClient.SendDeliveryNotification(order.OrderId);
                     order.NotificationSent = true;
                     await _apiClient.UpdateOrderStatus(order);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e,$"Error processing order {order.OrderId}");
+                    _logger.LogError(e, $"Error processing order {order.OrderId}");
                 }
             }
-            
+
             _logger.LogInformation("Finished processing orders.");
         }
         catch (Exception e)

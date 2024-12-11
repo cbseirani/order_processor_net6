@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using OrderProcessorService.Models;
+using OrderProcessorService.Services;
 using Xunit;
 
 namespace OrderProcessorService.Tests;
@@ -8,7 +9,7 @@ namespace OrderProcessorService.Tests;
 public class OrderProcessorTests
 {
     private readonly Mock<IApiClient> _apiClient = new();
-    private readonly Mock<ILogger<OrderProcessor>> _logger = new();
+    private readonly Mock<ILogger<Services.OrderService>> _logger = new();
     
     [Fact]
     public async Task ProcessOrdersAsync_UpdatesDeliveredOrders()
@@ -29,5 +30,5 @@ public class OrderProcessorTests
         _apiClient.Verify(x => x.SendDeliveryNotification(It.Is<string>(id => id.Equals("2"))), Times.Never);
     }
 
-    private OrderProcessor CreateProcessor() => new (_apiClient.Object, _logger.Object);
+    private Services.OrderService CreateProcessor() => new (_apiClient.Object, _logger.Object);
 }

@@ -1,10 +1,12 @@
+using OrderProcessorService.Services;
+
 namespace OrderProcessorService;
 
 public class Worker : BackgroundService
 {
-    private readonly IOrderProcessor _orderProcessor;
+    private readonly IOrderService _orderProcessor;
 
-    public Worker(IOrderProcessor orderProcessor)
+    public Worker(IOrderService orderProcessor)
     {
         _orderProcessor = orderProcessor;
     }
