@@ -14,7 +14,7 @@ You can use the docker-compose.yml to containerize and deploy the background ser
  - Be sure to have Docker Desktop and Docker compose installed.
  - Navigate to the dir with docker-compose.yml and run `docker-compose up --build -d`
    
-![image](https://github.com/user-attachments/assets/c5a5f9f2-e6c0-470b-a458-d782714001ff)
+![image](https://github.com/user-attachments/assets/22f3b0f9-cbdb-46e4-91f9-010e0bceb3ae)
 
 ![image](https://github.com/user-attachments/assets/1f8f2537-65ef-4fd8-9608-7466d99d664e)
 
